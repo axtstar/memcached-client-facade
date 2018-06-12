@@ -76,4 +76,6 @@ public interface ClientImpl {
 
     void shutdown();
 
+    boolean isGraceful();
+
 }

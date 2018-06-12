@@ -145,6 +145,11 @@ public class XmemcachedClientImpl extends ClientImplBase {
         }
     }
 
+    @Override
+    public boolean isGraceful(){
+        return false;
+    }
+
     private boolean hasNoAvailableServer() {
         boolean unavailable = memcached.getAvailableServers().isEmpty();
         if (unavailable && log.isDebugEnabled()) {

@@ -34,9 +34,9 @@ public class SpymemcachedClientImpl extends ClientImplBase {
 
     private static final Logger log = LoggerFactory.getLogger(SpymemcachedClientImpl.class);
 
-    private MemcachedClient memcached;
+    protected MemcachedClient memcached;
 
-    void waitForConnectionReady() {
+    protected void waitForConnectionReady() {
         // If no wait, you will see the following warning log message...
         // WARN net.spy.memcached.MemcachedConnection: Could not redistribute to
         // another node, retrying primary node for xxx
@@ -142,7 +142,18 @@ public class SpymemcachedClientImpl extends ClientImplBase {
         if (memcached == null) {
             throw new IllegalStateException("Memcached client instance has not been initialized yet.");
         }
-        memcached.shutdown();
+        if(isGraceful()){
+            log.info("attempt graceful shutdown");
+            memcached.shutdown(20, TimeUnit.SECONDS);
+        } else {
+            log.info("attempt immediate shutdown");
+            memcached.shutdown();
+        }
+    }
+
+    @Override
+    public boolean isGraceful(){
+        return true;
     }
 
     private boolean hasNoAvailableServer() {
