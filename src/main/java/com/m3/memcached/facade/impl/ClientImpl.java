@@ -58,6 +58,18 @@ public interface ClientImpl {
      */
     void initialize(List<InetSocketAddress> addresses, String namespace, long maxWaitMillis) throws IOException;
 
+    /**
+     * Initializes this instance
+     *
+     * @param addresses memcached server addresses
+     * @param namespace namespace
+     * @param maxWaitMillis max wait millis
+     * @param isGraceful graceful shutdown or not
+     * @param shutdownTimeout shutdown timeout when graceful
+     * @throws IOException something wrong
+     */
+    void initialize(List<InetSocketAddress> addresses, String namespace, long maxWaitMillis, boolean isGraceful, int shutdownTimeout) throws IOException;
+
     String getNamespace();
 
     void setNamespace(String namespace);
@@ -65,6 +77,12 @@ public interface ClientImpl {
     long getMaxWaitMillis();
 
     void setMaxWaitMillis(long maxWaitMillis);
+
+    void setShutdownTimeout(int shutdownTimeout);
+
+    void setIsGraceful(boolean isGraceful);
+
+    boolean isGraceful();
 
     <T> void set(String key, int secondsToExpire, T value) throws IOException;
 
@@ -75,7 +93,5 @@ public interface ClientImpl {
     void delete(String key) throws IOException;
 
     void shutdown();
-
-    boolean isGraceful();
 
 }

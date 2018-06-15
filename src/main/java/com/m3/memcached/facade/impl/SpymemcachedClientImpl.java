@@ -77,6 +77,17 @@ public class SpymemcachedClientImpl extends ClientImplBase {
     }
 
     @Override
+    public void initialize(List<InetSocketAddress> addresses, String namespace, long maxWaitMillis, boolean isGraceful, int shutdownTimeout) throws IOException {
+        notNullValue("addresses", addresses);
+        memcached = new MemcachedClient(addresses);
+        setNamespace(namespace);
+        setMaxWaitMillis(maxWaitMillis);
+        waitForConnectionReady();
+        setIsGraceful(isGraceful);
+        setShutdownTimeout(shutdownTimeout);
+    }
+
+    @Override
     public <T> void set(String key, int secondsToExpire, T value) throws IOException {
         notNullValue("key", key);
         if (hasNoAvailableServer()) {
@@ -143,10 +154,10 @@ public class SpymemcachedClientImpl extends ClientImplBase {
             throw new IllegalStateException("Memcached client instance has not been initialized yet.");
         }
         if(isGraceful()){
-            log.info("attempt graceful shutdown");
-            memcached.shutdown(20, TimeUnit.SECONDS);
+            log.warn("Attempting graceful shutdown");
+            memcached.shutdown(this.shutdownTimeout, TimeUnit.SECONDS);
         } else {
-            log.info("attempt immediate shutdown");
+            log.warn("Attempting immediate shutdown");
             memcached.shutdown();
         }
     }

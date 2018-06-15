@@ -33,6 +33,16 @@ public abstract class ClientImplBase implements ClientImpl {
     protected long maxWaitMillis = 100L;
 
     /**
+     *
+     */
+    protected boolean isGraceful = true;
+
+    /**
+     * time wait timeout seconds if isGraceful is true
+     */
+    protected int shutdownTimeout = 20;
+
+    /**
      * Returns key with namespace
      *
      * @param key raw key
@@ -56,6 +66,14 @@ public abstract class ClientImplBase implements ClientImpl {
         }
     }
 
+    @Override
+    public void setShutdownTimeout(int shutdownTimeout) { this.shutdownTimeout = shutdownTimeout; }
+
+    @Override
+    public void setIsGraceful(boolean isGraceful){ this.isGraceful = isGraceful; }
+
+    @Override
+    public boolean isGraceful(){ return this.isGraceful; }
 
     @Override
     public long getMaxWaitMillis() {

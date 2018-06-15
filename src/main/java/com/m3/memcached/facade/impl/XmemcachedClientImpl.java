@@ -62,6 +62,16 @@ public class XmemcachedClientImpl extends ClientImplBase {
     }
 
     @Override
+    public void initialize(List<InetSocketAddress> addresses, String namespace, long maxWaitMillis, boolean isGraceful, int shutdownTimeout) throws IOException {
+        notNullValue("addresses", addresses);
+        memcached = new XMemcachedClient(addresses);
+        setNamespace(namespace);
+        setMaxWaitMillis(maxWaitMillis);
+        setIsGraceful(isGraceful);
+        setShutdownTimeout(shutdownTimeout);
+    }
+
+    @Override
     public <T> void set(String key, int secondsToExpire, T value) throws IOException {
         notNullValue("key", key);
         try {

@@ -74,6 +74,14 @@ public class MemcachedClient {
         clientImpl.setNamespace(namespace);
     }
 
+    public void initialize(List<InetSocketAddress> addresses, String namespace, long maxWaitMillis, boolean isGraceful, int shutdownTimeout) throws IOException {
+        clientImpl.initialize(addresses);
+        clientImpl.setNamespace(namespace);
+        clientImpl.setMaxWaitMillis(maxWaitMillis);
+        clientImpl.setIsGraceful(isGraceful);
+        clientImpl.setShutdownTimeout(shutdownTimeout);
+    }
+
     /**
      * Returns cached value or null
      *
